@@ -1,0 +1,33 @@
+\ifx\mainclass\undefined
+\documentclass[cn,11pt,chinese,black,simple]{../elegantbook}
+\input{../needed.tex}
+\begin{document}
+\fi 
+\def\chapname{01num}
+
+% Start Here
+\chapter{数据表示}
+
+数据需要数字化之后才可以在计算机进行表示。核心的折中点：如何用尽可能少的位尽可能精确表示一个数字？
+
+\section{表示方式}
+
+\begin{definition}[原码]
+    {s|bbb}: 数字大小的变化方向不一致，存在两个 0 ： 0000 ，1111
+\end{definition}
+
+\begin{definition}[反码]
+    {sssbb}: 数字大小的变化方向一致，存在两个 0 ： 0000 ，1111
+\end{definition}
+
+\begin{definition}[补码]
+    {sbbbb}: 数字大小的变化方向一致，存在一个 0 ： 0000
+\end{definition}
+
+
+% End Here
+
+\let\chapname\undefined
+\ifx\mainclass\undefined
+\end{document}
+\fi 

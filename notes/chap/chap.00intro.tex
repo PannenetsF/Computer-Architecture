@@ -1,0 +1,142 @@
+\ifx\mainclass\undefined
+\documentclass[cn,11pt,chinese,black,simple]{../elegantbook}
+\input{../needed.tex}
+\begin{document}
+\fi 
+\def\chapname{00intro}
+
+% Start Here
+\chapter{课程介绍}
+
+任课教师：成元庆
+
+联系方式：yuanqing@ieee.org 18911370169
+
+课程助教：倪嘉诚
+
+\section{课程简介}
+
+计算机体系架构是连接软硬件的一门课程，
+向下连接集成电路设计，
+向上联系计算机高层的软件、编译器、操作系统等。
+
+近年来，出现了几种新型的 CPU 架构，但是整体来说，设计思路没有大的变化，本质来讲，目前的计算架构采用的仍然是冯 \(\cdot\) 诺依曼架构。
+
+本课程采用 MIPS 架构进行讲解，与 RISC-V 以及 ARM 等架构几乎同源，我国的龙芯项目也是采用的本指令集。教材采用 《 Computer Organization and Design 》 。
+
+本课程的课件采用英文编写，因为大量的术语尚未有确切的中文翻译，并且大量的文献都是英文编写。
+
+
+本课程有一定的前置课程，采用 C 语言进行教授，需要使用到部分数据结构的知识以及一些数字逻辑设计。
+
+
+\section{电脑是智能的吗？}
+
+对于编程者，是不需要考虑具体的实现的，如考虑数据管理、函数调用等操作，编程者可以按照思维设计软件的结构。
+但是对于最底层的电路来说，实际支持的可能只有与或非等基本的操作，只支持电路的二值化，硬件并不会自动的进行上述的这些工作。
+由操作系统这种底层的软件进行一系列的复杂调度，来作为沟通软硬件的接口。
+层次划分特点，为计算机体系提供了广泛的抽象，这种抽象可以使不同层次的使用者不需要了解过于细节的实现。
+
+软件的执行需要最终通过汇编器翻译成机器码，执行机器码需要操作系统对硬件的调用。
+
+\section{计算机表示的层次}
+
+高等语言会通过 Compile 转换为汇编语言，再通过 Assemble 转会为机器码，准备在机器上执行。
+硬件的架构也是一种抽象，如各种模块 ALU、RegFile等，最终需要落实到不同的逻辑门上。
+
+\section{计算机的结构}
+
+计算机的结构基本如下：
+
+\begin{itemize}
+    \item 处理器
+    \begin{itemize}
+        \item 控制部分
+        \item 数据通路
+    \end{itemize}
+    \item 主存
+    \item 输入
+    \item 输出
+\end{itemize}
+
+\section{集成电路}
+
+对于裸片（ Bare Die ）存在不同的 CMOS 工艺，最终需要封装到 PCB 板上。 PCB 一般是树脂或者塑料的衬板。
+到目前来说，集成电路的发展基本吻合摩尔定律 （2X/18 Months）。单位处理器的速度以 1.20-1.52 倍每年的倍率上升，但是随着单核处理器的某些瓶颈出现，速度逐渐放缓。
+
+DRAM 也就是动态随机存储器，用于计算机的主存从 1980 年代到如今存储密度已经上升了超过 8000 倍。
+
+\section{教学方向}
+
+计算机体系的速度限制是什么？
+
+基本的教学方向：
+
+\begin{itemize}
+    \item 计算机层级的抽象
+    \item 五个基本的计算机组成部分
+\end{itemize}
+
+具体来说
+
+\begin{markdown}
+
+\begin{itemize}
+    \item 计算机的机器表示
+    \begin{itemize}
+        \item 数字表示
+        \item 汇编语言
+        \item 编译与汇编    
+    \end{itemize} 
+    \item 处理器与硬件
+    \begin{itemize}
+        \item 逻辑电路设计
+        \item  CPU 组织
+        \item  流水线
+    \end{itemize}
+    \item 存储组织
+    \begin{itemize}
+        \item 缓存
+        \item 虚拟内存
+    \end{itemize}
+    \item 输入输出
+    \begin{itemize}
+        \item 中断
+        \item 硬盘与网络
+    \end{itemize}
+    \item 其他
+    \begin{itemize}
+        \item 性能
+        \item 虚拟化
+        \item 并行化
+    \end{itemize}
+\end{itemize}
+
+- 
+    - 
+    - 虚拟内存
+- 输入输出
+    - 中断
+    - 硬盘与网络
+- 其他
+    - 性能
+    - 虚拟化
+    - 并行化
+        - sa
+\end{markdown}
+
+\section*{单词}
+
+brawn 肌肉
+
+anatomy 解剖
+
+chassis 底盘
+
+dramatic 急剧的
+% End Here
+
+\let\chapname\undefined
+\ifx\mainclass\undefined
+\end{document}
+\fi 
