@@ -13,11 +13,11 @@
 
 作业内容：1.1-1.45, 1.50, 1.59
 
-\tableofcontents
+% \tableofcontents
 
 % Start Here
 
-\section{1.1-1.28}
+\homep{1.1-1.28}
 
 \begin{itemize}
     \item 1.1: 5 CPU
@@ -50,7 +50,7 @@
     \item 1.28: 26 wafer 
 \end{itemize}
 
-\section{1.29-1.45}
+\homep{1.29-1.45}
 
 \begin{itemize}
     \item assembler: i 
@@ -72,21 +72,55 @@
     \item spreadsheet: a
 \end{itemize}
 
-\section{1.46}
+\homep{1.46}
 
 \[Time_{avg,rot,7200} = 0.5 / 7200 = 0.000069444 s\]
 
 \[Time_{avg,rot,10000} = 0.5 / 10000 = 0.00005 s\]
 
-\section{1.47}
+\homep{1.47}
 
 在最外圈，一秒转 \(1/1600\) 圈；最内为 \(1/570\) ，那么分别存储 \(1600 \times 1.35 \times 10^6 = 2160000000 Byte\)， \(570 \times 1.35 \times 10^6 = 769500000 Byte\)。
 
-\section{1.50}
+\homep{1.50}
+
+BPS 指的是每秒传送 Bit (Not Byte) 数。
+
+a) 端对端延时包括建立时间与数据传输时间，即
+
+\[
+\begin{aligned}
+    T_{delay} &= T_{setup} + T_{trans} \\
+    &= \frac{m}{s} + \frac{L}{R}
+\end{aligned}
+\]
+
+
+b) 增加了路由的时间
+
+\[
+\begin{aligned}
+    T_{delay} &= T_{setup} + T_{trans} + T_{route}\\
+    &= \frac{m}{s} + \frac{L}{R} + t
+\end{aligned}
+\]
+
+
+c) 直接带入 b)
+
+\[T_{delay} = \frac{m}{s} + \frac{2L}{R} + \frac{t}{2}\]
 
 
 
-\section{1.59}
+\homep{1.59}
+
+成本与实际出产的可用芯片数目成反相关
+
+\[Cost \propto \frac{1}{(\text{Dies Per Wafer}) \times \text{Yield}}\]
+
+近似可以估计
+
+\[x + y + z = 0\]
 
 \section*{词汇}
 
