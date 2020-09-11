@@ -1,6 +1,7 @@
 all:
 	make slide
 	make note
+	make hw
 	make clean
 
 slide:
@@ -13,8 +14,15 @@ note:
 	&& latexmk -xelatex notes.tex \
 	&& cd ..
 
+# hw:=$(wildcard homework/homework*.tex)
+
+hw: 
+	cd homework\
+	&& make \
+	&& cd ..
+
 clean:
-	rm `find ./ -regex ".*\.log\|.*\.aux\|.*\.xdv\|.*\.in\|.*\.out\|.*\.lua\|.*\.fdb_latexmk\|.*\.fls\|.*\.toc"`
+	rm `find ./ -regex ".*\.log\|.*\.aux\|.*\.xdv\|.*\.in\|.*\.out\|.*\.lua\|.*\.fdb_latexmk\|.*\.fls\|.*\.toc\|.*\.gz"`
 
 
 

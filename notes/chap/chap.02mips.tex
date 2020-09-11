@@ -1,0 +1,83 @@
+\ifx\mainclass\undefined
+\documentclass[cn,11pt,chinese,black,simple]{../elegantbook}
+\input{../needed.tex}
+\begin{document}
+\fi 
+\def\chapname{02mips}
+
+% Start Here
+\chapter{MIPS 导论：汇编指令集}
+
+不同的核（Cluster）之间的传输通过总线，吞吐降低。改善架构存在必要。
+
+\section{什么是汇编语言？}
+
+汇编语言（Assembly Language）是 CPU 可以接收的基本操作，各个 CPU 系列存在不同。
+
+\section{指令集（Instruction Set Architectures）}
+
+随着计算机的发展，需要不同的功能，对应着生成许多的指令集不同的实现。
+
+最初出现的 VAX 有许多的指令，可以执行很大的运算。对应的 RISC 指令集将指令变成更细粒度的实现，虽然很多的问题需要巨量的指令数目，但是速度优于 VAX ，更小的指令用量更大，带来更规整的芯片布局，从而时钟周期会更小。 RISC 阵营包括：ARM，MIPS 以及 RISC-V 。
+
+MIPS 汇编语言贴近硬件的实现，没有变量类型的概念，操作的单元是寄存器，算数操作的来源只能是寄存器。寄存器的速度与其硬件开销存在制衡，MIPS 中只有 32 位寄存器，满足大部分的需求，并且硬件便于实现。那么这样的 32-bit 称为一个字（word）。
+
+寄存器可以用数字或者名称引用，数字形式：\lstinline{$1, $2, ... ,$32}
+
+定义如下：
+
+\begin{itemize}
+    \item \lstinline{$16 - $23} \(\rightarrow\) \lstinline{$s0 - $s7} 对应 C 变量
+    \item \lstinline{$8 - $15} \(\rightarrow\) \lstinline{$t0 - $t7} 对应临时变量
+\end{itemize}
+
+在汇编语言中，寄存器没有类型，通过操作判断其类型。
+
+在写 MIPS 时，需要注意添加注释（\#）。
+
+\section{运算指令格式}
+
+规整的格式：一个操作符加上三个操作数 \lstinline{1  2,3,4}，其中
+
+\begin{enumerate}
+    \item 操作符号
+    \item 目标操作数：dest
+    \item 第一源操作数：src1
+    \item 第二源操作数：src2
+\end{enumerate}
+
+如果需要 0 ，我们可以直接引用一个特殊的零寄存器：\lstinline{$zero$}。 MIPS 中没有原生的 \lstinline{mov} 而是使用 \lstinline{add $s0, $s1, $s2} 。同样地，可以用 \lstinline{add $zero, $zero, $s0} 用来产生流水线的气泡。
+
+如果需要常数，我们可以使用立即数指令：\lstinline{addi $s0, $s1, 10}。
+
+\section{内存与寄存器}
+
+内存大而慢，寄存器小而快，有一些和内存进行交互的指令也就是数据传输指令。这类的指令要求源与目标的地址，此外还有一个偏移量 offset：\lstinline{8($t0)} 指向的是指针为 \lstinline{$t0 + 8} 的内存。
+
+
+规整的格式：一个\lstinline{lw}操作符加上三个操作数 \lstinline{1  2,3(4)}，其中
+
+\begin{enumerate}
+    \item 操作符号
+    \item 目标寄存器位置：dest
+    \item 偏移量：offset
+    \item 源内存位置基址：src
+\end{enumerate}
+
+
+规整的格式：一个\lstinline{sw}操作符加上三个操作数 \lstinline{1  2,3(4)}，其中
+
+\begin{enumerate}
+    \item 操作符号
+    \item 目标内存位置：dest
+    \item 偏移量：offset
+    \item 源寄存器位置基址：src
+\end{enumerate}
+
+
+% End Here
+
+\let\chapname\undefined
+\ifx\mainclass\undefined
+\end{document}
+\fi 
