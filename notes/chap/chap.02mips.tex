@@ -74,6 +74,31 @@ MIPS 汇编语言贴近硬件的实现，没有变量类型的概念，操作的
     \item 源寄存器位置基址：src
 \end{enumerate}
 
+\section{数据对齐}
+
+为了保证取字的迅速以及地址的规整性，需要规定内存地址的对齐。
+
+\section{条件分支}
+
+为了支持 \lstinline{for-loop/while-loop/do-while-loop/if-else/switch-case} 的实现，定义一系列的条件分支指令。
+
+\lstinline{j label} 会跳转（ jump ）到标记了 \lstinline{label} 的位置。类似的还有 \lstinline{beq, bne, slt, slti} （ branch if equal ， branch if not equal, set on less than, set on less than immediate ）。
+
+\section{对字节的操作}
+
+由于对字节的操作十分常见，提供了字节级别的操作，如 \lstinline{lb, sb} ，不进行符号位的扩展。可以使用 \lstinline{addu} 类的指令来停止对溢出的处理（抛出异常）。
+
+\section{逻辑操作}
+
+比如有左移右移指令，可以分为逻辑型以及算数型用来区分右移的符号扩展。
+
+\section{函数调用}
+
+我们需要明确，函数的参数传递方式以及返回方式。 MIPS 支持 4 个寄存器的函数调用，更多的参数通过栈进行调用。
+
+函数作为程序的一部分，也会加载到内存中，需要在调用前进行参数准备，并且返回到调用的位置，所以需要将调用位置保存下来通过 \lstinline{jr} 移交控制。那么这里的 \lstinline{jr} 和之前的 \lstinline{j} 有什么区别呢？由于操作数是来自寄存器，也就是编程者可以控制的，更加灵活的跳转到不同的调用位置。
+
+引入了 \lstinline{jal} ，将返回位置隐式存储到 \lstinline{$ra} ，在调用后可以直接返回。
 
 % End Here
 

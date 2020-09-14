@@ -1,0 +1,38 @@
+\documentclass[lang=cn,11pt,a4paper,cite=authoryear]{elegantpaper}
+
+\input{needed.tex}
+
+\title{计算机体系架构\quad 第一周作业}
+\author{范云潜 18373486}
+\institute{微电子学院 184111 班}
+\date{\zhtoday}
+
+\begin{document}
+
+\maketitle
+
+作业内容： Lab01
+
+\tableofcontents
+
+
+
+% Start Here
+
+\homep{Exercise 1}
+
+\subhome{Directives}
+
+\lstinline{.data} 表明使用了一个小节专门用于存储程序的数据。(.data       Subsequent items stored in Data segment at next available address)
+
+\lstinline{.word} 表明定义的数据是以一个字（ word ）为单位的，在这里定义了一个字大小对应的内存位置，存储了数字 9 ，并且可以使用标签 \lstinline{n} 来引用对应的内存位置。(.word       Store the listed value(s) as 32 bit words on word boundary)
+
+\lstinline{.text} 表示代码段开始。(.text       Subsequent items (instructions) stored in Text segment at next available address)
+
+\subhome{Breakpoint}
+
+
+% http://courses.missouristate.edu/kenvollmar/mars/help/syscallhelp.html
+% End Here
+
+\end{document}
