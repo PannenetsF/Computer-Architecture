@@ -31,8 +31,76 @@
 
 \subhome{Breakpoint}
 
+在汇编之后，可以在执行顺序旁进行断点添加，类似于 gdb 的 \lstinline{b} ，如\figref{1}。直接运行会运行到下一个断点或直接完成程序，可以使用 Step 模式进行单条指令执行。
 
-% http://courses.missouristate.edu/kenvollmar/mars/help/syscallhelp.html
+\qfig[1]{l1p1.png}{断点添加界面}
+
+\subhome{Regs}
+
+寄存器的值可以从侧面寄存器面板直接获得，如\figref{2}，双击即可强制修改。
+
+
+\qfig[2]{l1p2.png}{寄存器面板}
+
+\subhome{Mem}
+
+根据 Data Segment 面板，n 存储到 \lstinline{0x10010000} 。
+
+\subhome{syscall}
+
+对于模拟器提供的 \lstinline{syscall} 系列的函数，有着详细的文档说明\footnote{http://courses.missouristate.edu/kenvollmar/mars/help/syscallhelp.html}，这里使用的是 1 和 10 号 syscall ，分别是 \lstinline{print_int} 与 \lstinline{exit} 。
+
+为了使用 syscall 需要在 \lstinline{$vi} 中写入调用标号，之后使用 \lstinline{syscall} 。
+
+\homep{Exercise 2}
+
+实际上这个代码段只用到了 \lstinline{add} 指令，分别用来加载寄存器内的值以及进行算数运算。为了验证代码的正确性，使用 python 完成了一个 \lstinline{gold} 函数用于模拟行为，请见 lab1\_ex2.py。
+
+\homep{Exercise 3}
+
+提炼出的 Bugs 如下：
+
+\begin{enumerate}
+    \item 未对计数器 \lstinline{$v0} 进行初始化而直接进行计数
+    \item 指向一个 word 的指针应当以 4 bytes 为单位，而不是 1 byte
+    \item 由于最后一个数据为 0 ，不应计数
+\end{enumerate}
+
+\homep{Exercise 4}
+
+循环段落在，并且为每一行添加了注释进行说明
+
+\begin{lstlisting}
+$L3:
+    sw      $3,0($4)    # store the read word to 'dest'
+    addiu   $6,$6,1     # add 1 to the counter of loop
+    lw      $3,4($2)    # read next word of 'source'
+    addiu   $4,$4,4     # advance the pointer of 'dest' by a word 
+    addiu   $2,$2,4     # advance the pointer of 'source' by a word 
+    bne     $3,$0,$L3   # loop condition: if read a '0' then stop
+    nop
+\end{lstlisting}    
+
+
+source 在 
+
+\begin{lstlisting}
+source:
+    .word   3
+    .word   1
+    .word   4
+    .word   1
+    .word   5
+    .word   9
+    .word   0
+    .ident  "GCC: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0"
+
+\end{lstlisting}
+
+dest 被定义为 40 个字节长，4 字节为单位的内存： \lstinline{.comm   dest,40,4}
+
+
+
 % End Here
 
 \end{document}
