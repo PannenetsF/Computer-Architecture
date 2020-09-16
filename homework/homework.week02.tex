@@ -1,0 +1,364 @@
+\documentclass[lang=cn,11pt,a4paper,cite=authoryear]{elegantpaper}
+
+\input{needed.tex}
+
+\title{计算机体系架构\quad 第二周作业}
+\author{范云潜 18373486}
+\institute{微电子学院 184111 班}
+\date{\zhtoday}
+
+\begin{document}
+
+\maketitle
+
+作业内容：2.10, 2.11, 2.13, 2.14; 2.15, 2.16, 2.21, 2.29;
+
+% \tableofcontents
+
+% Start Here
+
+\homep{2.10}
+
+\begin{lstlisting}
+    .data
+	.align 2
+jtab: # jump table
+	.word	L0, L1, L2, L3, L4 # exit
+
+	.text 
+
+.macro ret # return 
+	jr   	$ra
+.end_macro 
+	
+
+# f g h j i k
+# 0 1 2 3 4 5
+
+main:	# f-k -> s0-s5
+	li	$t2, 4 # test code 
+	li	$s5, 1 # test code 
+	li	$s1, 1 # test code 
+	li	$s2, 2 # test code 
+	li	$s3, 3 # test code 
+	li	$s4, 4 # test code 
+	sub 	$t1, $t2, $s5 # t1 = 4-k 
+	slt	$t0, $zero, $t1	#  0 < 4 - k should be 1
+	beq 	$t0, $zero, L4 # check fail then exit
+	slt 	$t0, $s5, $zero # k < 0 should be 0 
+	bne	$t0, $zero, L4 # check fail then exit
+	mul	$t1, $t2, $s5 # calculate the bias 
+	la	$t0, jtab # t0 = addr_of_switch + 4 * k
+	add 	$t1, $t0, $t1 # advance the pointer
+	lw	$t0, ($t1) # load the dest memory addr 
+	
+	jalr	$t0 # start switch 
+	j 	L4 # exit 
+	
+L0: 	add 	$s0, $s3, $s4 # case 0
+	ret 
+L1: 	add	$s0, $s1, $s2 # case 1
+	ret 
+L2: 	sub	$s0, $s1, $s2 # case 2
+	ret
+L3:	sub 	$s0, $s3, $s4 # case 3
+	ret 
+L4: 	li      $v0, 10	# exit
+	syscall			
+
+	
+\end{lstlisting}    
+
+\homep{2.11}
+
+\subhome{a}
+
+\begin{lstlisting}
+if (k == 0) {
+    f = i + j;
+}else if(k == 1) {
+    f = g + h;
+}else if (k == 2) {
+    f = g - h;
+}else if (k == 3) {
+    f = i - j;
+}else {
+    return 0; // check failed
+}
+\end{lstlisting}
+
+\subhome{b}
+
+
+\begin{lstlisting}
+	.data
+	.align 2
+jtab:
+	.word	L0, L1, L2, L3, L4 # exit
+
+	.text 
+
+.macro ret
+	jr   	$ra
+.end_macro 
+
+.macro exit
+	li      $v0, 10	# exit
+	syscall
+.end_macro
+# f g h j i k
+# 0 1 2 3 4 5
+
+main:	# f-k -> s0-s5
+	li	$t2, 4 # test code 
+	li	$s5, 1 # test code 
+	li	$s1, 1 # test code 
+	li	$s2, 2 # test code 
+	li	$s3, 3 # test code 
+	li	$s4, 4 # test code 
+	beq 	$t1, $zero, L0 # cmp with 0
+	subi	$t1, $s5, 1
+ 	beq 	$t1, $zero, L1 # cmp with 1
+	subi	$t1, $s5, 2
+	beq 	$t1, $zero, L2 # cmp with 2
+	subi	$t1, $s5, 3
+	beq 	$t1, $zero, L3 # cmp with 3
+	j 	L4 # else: return
+
+	
+L0: 	add 	$s0, $s3, $s4 # case 0
+	exit 
+L1: 	add	$s0, $s1, $s2 # case 1
+	exit
+L2: 	sub	$s0, $s1, $s2 # case 2
+	exit
+L3:	sub 	$s0, $s3, $s4 # case 3
+	exit
+L4: 				
+	exit
+	
+\end{lstlisting}    
+
+\subhome{3}
+
+对于跳转表，算数类：6 ，传输类：3 ，分支类：2，跳转类：3 ，共 17.2 clk 。
+
+对于 if-else ，算数类：4 ，传输类：1 ，分支类：4，跳转类：1 ，共 13.4 clk 。
+
+但是对于更多分支类型的表达式，跳转表会更加迅速。
+
+\homep{2.13}
+
+如 \figref{213}。
+
+\qfig[213]{h2p1.png}{循环流程图}
+
+\homep{2.14}
+
+
+\begin{lstlisting}
+    .data
+	.align 2
+jtab: # jump table
+	.word	Loop, Exit
+
+	.text 
+.macro ret # return 
+	jr   	$ra
+.end_macro 
+    
+.macro exit
+	li      $v0, 10	# exit
+	syscall
+.end_macro
+
+# s3 -> i
+# s6 -> save 
+# s5 -> k
+
+main:	
+
+Loop:
+    sll     $t1, $s3, 2 # t1 = i * 4 
+    add     $t1, $t1, $s6
+    lw      $t0, 0($t1)
+	sub 	$t1, $t2, $s5 # t1 = 4-k 
+	slt	$t0, $zero, $t1	#  0 < 4 - k should be 1
+	beq 	$t0, $zero, L4 # check fail then exit
+	slt 	$t0, $s5, $zero # k < 0 should be 0 
+	bne	$t0, $zero, L4 # check fail then exit
+	mul	$t1, $t2, $s5 # calculate the bias 
+	la	$t0, jtab # t0 = addr_of_switch + 4 * k
+	add 	$t1, $t0, $t1 # advance the pointer
+	lw	$t0, ($t1) # load the dest memory addr 
+	
+	jalr	$t0 # start switch 
+	j 	L4 # exit 
+	
+L0: 	add 	$s0, $s3, $s4 # case 0
+	ret 
+L1: 	add	$s0, $s1, $s2 # case 1
+	ret 
+L2: 	sub	$s0, $s1, $s2 # case 2
+	ret
+L3:	sub 	$s0, $s3, $s4 # case 3
+	ret 
+L4: 	li      $v0, 10	# exit
+	syscall			
+
+	
+\end{lstlisting}    
+
+\homep{2.15}
+
+
+\begin{lstlisting}
+		.text
+
+.macro ret # return 
+	jr   	$ra
+.end_macro 
+
+# int i in $s0
+
+set_array:
+	# allocate space for: fp/ra/array[10]/num = 4 * (1+1+10+1) = 52
+	addi 	$sp, $sp, -52 
+	# store fp, ra, num for the caller,
+	# num is the only args, in a0
+	sw	$fp, 48($sp)
+	sw	$ra, 44($sp)
+	sw	$a0, 40($sp)
+	# init the fp for the stack
+	addi	$fp, $sp, 48 
+	# set i = 0, max = 10
+	add 	$s0, $zero, $zero 
+	addi 	$t0, $zero, 10 
+	
+	
+loop:	
+	# set bias as 4*i to index array 
+	sll 	$t1, $s0, 2
+	add 	$t1, $t1, $sp 
+	# i++ 
+	addi 	$s0, $s0, 1 
+	# set num and i as args
+	add 	$a0, $a0, $zero 
+	add 	$a1, $s0, $zero
+	jal 	compare
+	sw 	$v0, ($t1) 
+	bne 	$s0, $t0, loop
+	
+	# loop end, then restore the stack for caller
+	lw	$fp, 48($sp)
+	lw	$ra, 44($sp)
+	lw	$a0, 40($sp)
+	addi 	$sp, $sp, 52
+	ret 
+
+compare:
+	# allocate for fp/ra
+	addi 	$sp, $sp, -8
+	sw	$fp, 4($sp)
+	sw	$ra, ($sp)
+	
+	jal	Sub
+	# if (v0 < 0)==1 < 1 == 0, then return 0; else return 1
+	slt	$v0, $v0, $zero
+	slti 	$v0, $v0, 1
+	
+	# restore the frame for caller
+	lw 	$fp, 4($sp)
+	lw 	$ra, ($sp)
+	addi 	$sp, $sp, 8
+	ret
+	
+
+Sub: 
+	# allocate for fp/ra
+	addi 	$sp, $sp, -8
+	sw	$fp, 4($sp)
+	sw	$ra, ($sp)
+	
+	sub	$v0, $a0, $a1
+	
+	# restore the frame for caller
+	lw 	$fp, 4($sp)
+	lw 	$ra, ($sp)
+	addi 	$sp, $sp, 8
+	ret
+	
+\end{lstlisting}
+
+栈的示意图如 \figref{223}
+
+\qfig[223]{h2p2.png}{stack 示意图}
+
+\homep{2.16}
+
+
+\begin{lstlisting}
+# n stored in $a0
+
+	.data
+msg: .asciiz "the ans is "
+
+	.text
+
+	addi 	$s0, $zero, 1
+	# li	$a0, 7
+	# la	$ra, prt
+fib:	
+	addi	$sp, $sp, -12
+	# push ra and n to stack
+	sw 	$ra, 8($sp)
+	sw 	$a0, 4($sp)
+	# if n == 0, return 0; 
+	beq	$a0, $zero, n0
+	# if n == 1, return 1;
+	beq	$a0, $s0, n1
+	# else fib(n-1)
+	addi 	$a0, $a0, -1
+	jal	fib
+	# t0 = fib(n-1)
+	add 	$t0, $v0, $zero
+	sw 	$t0, ($sp) 
+	addi 	$a0, $a0, -1
+	jal	fib
+	# v0 = fib(n-1) + fib(n-2)
+	# store the answer
+	lw	$t0, ($sp)
+	add 	$v0, $t0, $v0
+	# pop ra and n to stack 
+done:	lw	$ra, 8($sp)
+	lw	$a0, 4($sp)
+	addi 	$sp, $sp, 12
+	
+	# return to the caller
+	jr	$ra
+	
+	
+
+n0:	add	$v0, $zero, $zero
+	j	done 
+n1: 	addi	$v0, $zero, 1
+	j 	done
+prt:	add 	$a0, $zero, $v0
+	li      $v0, 1
+	syscall 
+	
+	
+\end{lstlisting}
+
+
+
+
+
+\homep{2.21}
+
+
+\homep{2.29}
+% End Here
+
+
+\end{document}
