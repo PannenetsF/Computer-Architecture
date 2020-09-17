@@ -157,55 +157,30 @@ L4:
 
 
 \begin{lstlisting}
-    .data
-	.align 2
-jtab: # jump table
-	.word	Loop, Exit
+ 	.data
+save:	.word 	5, 5, 5, 9
 
-	.text 
-.macro ret # return 
-	jr   	$ra
-.end_macro 
-    
-.macro exit
-	li      $v0, 10	# exit
+# i -> $s3, k -> $s5, save -> $s6
+
+	.text
+	# test code begin
+	add	$s3, $zero, $zero # init i as 0
+	addi	$s5, $zero, 5 # test k as 5
+	la	$s6, save # init save's address 
+	la 	$ra, exit # init ra
+	# test code end
+loop:	sll	$t1, $s3, 2 # bias = i * 4
+	add	$t2, $s6, $t1 # advance bias to save 
+	lw	$t0, ($t2) # load save[i]
+	bne	$t0, $s5, end # if test fail, then return
+	addi	$s3, $s3, 1 # else i++
+	j	loop # loop
+
+end:	
+	jr	$ra
+exit:	
+	li	$v0, 10
 	syscall
-.end_macro
-
-# s3 -> i
-# s6 -> save 
-# s5 -> k
-
-main:	
-
-Loop:
-    sll     $t1, $s3, 2 # t1 = i * 4 
-    add     $t1, $t1, $s6
-    lw      $t0, 0($t1)
-	sub 	$t1, $t2, $s5 # t1 = 4-k 
-	slt	$t0, $zero, $t1	#  0 < 4 - k should be 1
-	beq 	$t0, $zero, L4 # check fail then exit
-	slt 	$t0, $s5, $zero # k < 0 should be 0 
-	bne	$t0, $zero, L4 # check fail then exit
-	mul	$t1, $t2, $s5 # calculate the bias 
-	la	$t0, jtab # t0 = addr_of_switch + 4 * k
-	add 	$t1, $t0, $t1 # advance the pointer
-	lw	$t0, ($t1) # load the dest memory addr 
-	
-	jalr	$t0 # start switch 
-	j 	L4 # exit 
-	
-L0: 	add 	$s0, $s3, $s4 # case 0
-	ret 
-L1: 	add	$s0, $s1, $s2 # case 1
-	ret 
-L2: 	sub	$s0, $s1, $s2 # case 2
-	ret
-L3:	sub 	$s0, $s3, $s4 # case 3
-	ret 
-L4: 	li      $v0, 10	# exit
-	syscall			
-
 	
 \end{lstlisting}    
 
