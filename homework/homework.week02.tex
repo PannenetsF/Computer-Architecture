@@ -156,6 +156,10 @@ L4:
 \homep{2.14}
 
 
+原始的代码次数：6 * 10 = 60
+
+优化后次数：4 * 10 + 1 = 51
+
 \begin{lstlisting}
  	.data
 save:	.word 	5, 5, 5, 9
@@ -172,12 +176,9 @@ save:	.word 	5, 5, 5, 9
 loop:	sll	$t1, $s3, 2 # bias = i * 4
 	add	$t2, $s6, $t1 # advance bias to save 
 	lw	$t0, ($t2) # load save[i]
-	bne	$t0, $s5, end # if test fail, then return
 	addi	$s3, $s3, 1 # else i++
-	j	loop # loop
-
-end:	
-	jr	$ra
+	beq	$t0, $s5, loop # if test fail, then return
+	addi 	$s3, $s3, -1 # discard the i++
 exit:	
 	li	$v0, 10
 	syscall

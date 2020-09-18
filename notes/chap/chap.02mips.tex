@@ -100,6 +100,12 @@ MIPS 汇编语言贴近硬件的实现，没有变量类型的概念，操作的
 
 引入了 \lstinline{jal} ，将返回位置隐式存储到 \lstinline{$ra} ，在调用后可以直接返回。
 
+为了保护函数调用的上下文，需要使用栈维护变量以及函数返回地址。
+
+按照规则， saved regs 由被访问者进行维护，temp regs 由访问者进行保存。
+
+\section{机器级表示}
+
 % End Here
 
 \let\chapname\undefined
