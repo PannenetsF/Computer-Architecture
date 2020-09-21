@@ -36,12 +36,12 @@ jtab: # jump table
 # 0 1 2 3 4 5
 
 main:	# f-k -> s0-s5
-	li	$t2, 4 # test code 
-	li	$s5, 1 # test code 
-	li	$s1, 1 # test code 
-	li	$s2, 2 # test code 
-	li	$s3, 3 # test code 
-	li	$s4, 4 # test code 
+	# li	$t2, 4 # test code 
+	# li	$s5, 1 # test code 
+	# li	$s1, 1 # test code 
+	# li	$s2, 2 # test code 
+	# li	$s3, 3 # test code 
+	# li	$s4, 4 # test code 
 	sub 	$t1, $t2, $s5 # t1 = 4-k 
 	slt	$t0, $zero, $t1	#  0 < 4 - k should be 1
 	beq 	$t0, $zero, L4 # check fail then exit
@@ -110,12 +110,12 @@ jtab:
 # 0 1 2 3 4 5
 
 main:	# f-k -> s0-s5
-	li	$t2, 4 # test code 
-	li	$s5, 1 # test code 
-	li	$s1, 1 # test code 
-	li	$s2, 2 # test code 
-	li	$s3, 3 # test code 
-	li	$s4, 4 # test code 
+	# li	$t2, 4 # test code 
+	# li	$s5, 1 # test code 
+	# li	$s1, 1 # test code 
+	# li	$s2, 2 # test code 
+	# li	$s3, 3 # test code 
+	# li	$s4, 4 # test code 
 	beq 	$t1, $zero, L0 # cmp with 0
 	subi	$t1, $s5, 1
  	beq 	$t1, $zero, L1 # cmp with 1
@@ -209,21 +209,21 @@ set_array:
 	addi	$fp, $sp, 48 
 	# set i = 0, max = 10
 	add 	$s0, $zero, $zero 
-	addi 	$t0, $zero, 10 
+	addi 	$s1, $zero, 10 
 	
 	
 loop:	
 	# set bias as 4*i to index array 
 	sll 	$t1, $s0, 2
-	add 	$t1, $t1, $sp 
+	add 	$fp, $t1, $sp 
 	# i++ 
 	addi 	$s0, $s0, 1 
 	# set num and i as args
 	add 	$a0, $a0, $zero 
 	add 	$a1, $s0, $zero
 	jal 	compare
-	sw 	$v0, ($t1) 
-	bne 	$s0, $t0, loop
+	sw 	$v0, ($fp) 
+	bne 	$s0, $s1, loop
 	
 	# loop end, then restore the stack for caller
 	lw	$fp, 48($sp)
@@ -234,7 +234,9 @@ loop:
 
 compare:
 	# allocate for fp/ra
-	addi 	$sp, $sp, -8
+	addi 	$sp, $sp, -16
+	sw 	$s1, 16($sp)
+	sw 	$s0, 8($sp)
 	sw	$fp, 4($sp)
 	sw	$ra, ($sp)
 	
@@ -244,9 +246,11 @@ compare:
 	slti 	$v0, $v0, 1
 	
 	# restore the frame for caller
+	lw 	$s1, 12($sp)
+	lw 	$s0, 8($sp)
 	lw 	$fp, 4($sp)
 	lw 	$ra, ($sp)
-	addi 	$sp, $sp, 8
+	addi 	$sp, $sp, 16
 	ret
 	
 
@@ -433,3 +437,83 @@ finish	addi	$t0, $t0, 100 # t0 += 100
 
 
 \end{document}
+
+
+% \begin{lstlisting}
+	% 2.15 origin
+% 	.text
+
+% .macro ret # return 
+% jr   	$ra
+% .end_macro 
+
+% # int i in $s0
+
+% set_array:
+% # allocate space for: fp/ra/array[10]/num = 4 * (1+1+10+1) = 52
+% addi 	$sp, $sp, -52 
+% # store fp, ra, num for the caller,
+% # num is the only args, in a0
+% sw	$fp, 48($sp)
+% sw	$ra, 44($sp)
+% sw	$a0, 40($sp)
+% # init the fp for the stack
+% addi	$fp, $sp, 48 
+% # set i = 0, max = 10
+% add 	$s0, $zero, $zero 
+% addi 	$t0, $zero, 10 
+
+
+% loop:	
+% # set bias as 4*i to index array 
+% sll 	$t1, $s0, 2
+% add 	$t1, $t1, $sp 
+% # i++ 
+% addi 	$s0, $s0, 1 
+% # set num and i as args
+% add 	$a0, $a0, $zero 
+% add 	$a1, $s0, $zero
+% jal 	compare
+% sw 	$v0, ($t1) 
+% bne 	$s0, $t0, loop
+
+% # loop end, then restore the stack for caller
+% lw	$fp, 48($sp)
+% lw	$ra, 44($sp)
+% lw	$a0, 40($sp)
+% addi 	$sp, $sp, 52
+% ret 
+
+% compare:
+% # allocate for fp/ra
+% addi 	$sp, $sp, -8
+% sw	$fp, 4($sp)
+% sw	$ra, ($sp)
+
+% jal	Sub
+% # if (v0 < 0)==1 < 1 == 0, then return 0; else return 1
+% slt	$v0, $v0, $zero
+% slti 	$v0, $v0, 1
+
+% # restore the frame for caller
+% lw 	$fp, 4($sp)
+% lw 	$ra, ($sp)
+% addi 	$sp, $sp, 8
+% ret
+
+
+% Sub: 
+% # allocate for fp/ra
+% addi 	$sp, $sp, -8
+% sw	$fp, 4($sp)
+% sw	$ra, ($sp)
+
+% sub	$v0, $a0, $a1
+
+% # restore the frame for caller
+% lw 	$fp, 4($sp)
+% lw 	$ra, ($sp)
+% addi 	$sp, $sp, 8
+% ret
+
+% \end{lstlisting}

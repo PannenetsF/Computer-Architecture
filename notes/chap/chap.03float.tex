@@ -1,0 +1,29 @@
+\ifx\mainclass\undefined
+\documentclass[cn,11pt,chinese,black,simple]{../elegantbook}
+\input{../needed.tex}
+\begin{document}
+\fi 
+\def\chapname{03float}
+
+% Start Here
+\chapter{浮点数}
+
+\section{定点数}
+
+定点数的表示方法与整型数据基本一致，只是计量基准从 1 转换为 \(2^k\) 。
+
+\section{二进制科学计数法}
+
+表示为以有效数字 1 开头的尾数乘以指数。
+
+
+\section*{Word}
+
+mantissa 尾数
+
+% End Here
+
+\let\chapname\undefined
+\ifx\mainclass\undefined
+\end{document}
+\fi 

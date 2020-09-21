@@ -106,6 +106,37 @@ MIPS 汇编语言贴近硬件的实现，没有变量类型的概念，操作的
 
 \section{机器级表示}
 
+I， J， R 形式的指令格式分别对应立即数、跳转与寄存器。
+
+对 R 指令来说：
+
+\begin{itemize}
+    \item opcode： 6，指令码
+    \item rs： 5， 第一操作数 
+    \item rt： 5， 第二操作数
+    \item rd： 5， 目标操作数
+    \item shamt： 5， 移位量
+    \item funct： 函数
+\end{itemize}
+
+但是 \lstinline{mult} 与 \lstinline{div} 的目的寄存器在 \lstinline{hi} 和 \lstinline{low} 。
+
+I 型指令：
+
+
+\begin{itemize}
+    \item opcode： 6，指令码
+    \item rs： 5， 第一操作数 
+    \item rt： 5， 第二操作数
+    \item immediate： 16
+\end{itemize}
+
+为了使用高于 16 位的立即数，汇编器会为我们自动转换一部分数据，这用到了 \lstinline{$at} （ assembler temporary ） ，因此使用者不应该使用它。
+
+由于立即数的限制，条件跳转存在跳转的范围，在上下文进行相对寻址。
+
+
+J 型指令使用 PC 的计数器的高位以及乘四的地址。
 % End Here
 
 \let\chapname\undefined
