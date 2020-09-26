@@ -1,0 +1,24 @@
+\ifx\mainclass\undefined
+\documentclass[cn,11pt,chinese,black,simple]{../elegantbook}
+\input{../needed.tex}
+\begin{document}
+\fi 
+\def\chapname{04decode}
+
+% Start Here
+\chapter{反汇编}
+
+\section{反汇编}
+
+可以通过二进制数的方式进行反汇编，得到原来的汇编代码。
+
+\section{人工指令}
+
+有些满足二进制指令代码的格式要求的代码可以转换为真汇编指令。
+
+% End Here
+
+\let\chapname\undefined
+\ifx\mainclass\undefined
+\end{document}
+\fi 
