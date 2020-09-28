@@ -1,0 +1,37 @@
+\ifx\mainclass\undefined
+\documentclass[cn,11pt,chinese,black,simple]{../elegantbook}
+\input{../needed.tex}
+\begin{document}
+\fi 
+\def\chapname{05runningaprogram}
+
+% Start Here
+\chapter{运行程序}
+
+\section{解释与编译}
+
+直接将源代码解释为可执行的文件。如 Java 转换为 Byte Code 。为了提高解释性程序的性能，通过统计进行优化，可以将自己编译成对应平台的二进制码。解释型的语言有跨平台的特性。
+
+编译性的程序报错更多，错误更难定位与调试。而优化后的代码会产生源码的不对应。最终产生的可执行文件相当小。
+
+对于汇编，需要进行扫描来确定不确定的那些地址。对于 Object 中的绝对地址，只能通过链接器进行确定，具体由符号表（ Symbol Table ）实现。一些不可到达的大距离跳转，以及改变的被分配地址，通过 Relocation Table 重定位得到绝对地址。
+
+对于可执行文件需要有头部信息，代码段，数据段，调试信息。
+
+Java 使用解释器与翻译器的原因是跨平台支持。
+
+\section{链接与加载}
+
+链接可以提高编译的效率和可维护性。
+
+为了解决函数的引用问题，从源代码、库进行搜索。
+
+静态链接库可以方便的运行，但是打包了所有的库，体积较大。动态库虽然需要反复的加载，但是速度一般更快。
+
+加载器加载库并运行。会加载命令行参数、清空寄存器、跳转到开始代码加载参数之后调用主函数。
+% End Here
+
+\let\chapname\undefined
+\ifx\mainclass\undefined
+\end{document}
+\fi 

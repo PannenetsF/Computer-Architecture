@@ -39,10 +39,28 @@ ignore:
 
 \homep{3.14}
 
+\begin{lstlisting}
+add $s1, $s0, $zero
+sll $s0, $s0, 3
+add $s1, $s0, $s1
+\end{lstlisting}
 
 \homep{3.32}
 
 
+\begin{lstlisting}
+#include <stdio.h>
+
+int main()
+{
+    float num;
+    int *nump;
+    nump = (int *)(&num);
+    scanf("%f", &num);
+    printf("%x", *(nump));
+    return 0;
+}
+\end{lstlisting}
 
 \homep{3.37}
 
