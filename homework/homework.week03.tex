@@ -1,0 +1,62 @@
+\documentclass[lang=cn,11pt,a4paper,cite=authoryear]{elegantpaper}
+
+\input{needed.tex}
+
+\title{计算机体系架构\quad 第三周作业}
+\author{范云潜 18373486}
+\institute{微电子学院 184111 班}
+\date{\zhtoday}
+
+\begin{document}
+
+\maketitle
+
+作业内容：3.1, 3.4, 3.7, 3.9， 3.14， 3.32， 3.37， 3.45
+
+% \tableofcontents
+
+\homep{3.1}
+
+\lstinline{4096 = 0x1000 = 0b 00000000 00000000 00010000 00000000 }
+
+\homep{3.4}
+
+\lstinline{0b1111 1111 1111 1111 1111 1111 0000 0110 = 0xffffff06 = -250}
+
+\homep{3.7}
+
+\begin{lstlisting}
+addu $t2, $t3, $0
+# bltzal 
+bgez $t3, ignore
+sub $t2, $0, $t2
+ignore:
+\end{lstlisting}
+
+\homep{3.9}
+
+假设低位产生符号扩展，那么会变成负数，原本的 +x(low n-1 bit) 会变成 (x - (1<<n)) 那么将 \lstinline{A_upper_adjusted} 加 1 即可。若不产生，保持不变。
+
+\homep{3.14}
+
+
+\homep{3.32}
+
+
+
+\homep{3.37}
+
+float 类型 0x41200000 = 0b 0100 0001 0010 0000 0000 0000 0000 0000， double 类型 0x4024000000000000 = 0b 0100 0000 0010  0100 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 。
+
+% 10 = 8 + 2 = 1.010
+
+% 10 + 10000000001
+
+\homep{3.45}
+
+将符号位放到 64 位的头部。
+% Start Here
+
+% End Here
+
+\end{document}
