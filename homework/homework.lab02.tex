@@ -1,0 +1,58 @@
+\documentclass[lang=cn,11pt,a4paper,cite=authoryear]{elegantpaper}
+
+\input{needed.tex}
+
+\title{计算机体系架构\quad Lab02}
+\author{范云潜 18373486}
+\institute{微电子学院 184111 班}
+\date{\zhtoday}
+
+\begin{document}
+
+\maketitle
+
+% 作业内容：
+
+% \tableofcontents
+
+% Start Here
+
+\homep{ex1}
+
+对于一个 32-bit 的整数 \lstinline{x}，加法发生溢出的边界是 \lstinline{~x}，此时恰好得到 \lstinline{~0x0} ，若是加数大于此边界（无符号类型）即可判断发生了溢出。
+
+\lstinputlisting[caption={ex1 solution}]{lab02/ex1.asm}
+
+\homep{ex2}
+
+对于一个浮点数，当其越来越大，每两个数字之间的间距也会越来越大，那么我们首先挑选一个很大的浮点数\footnote{通过 C 进行转换成浮点数} \{0b 0 | 111 1111 0 | 000 0000 0000 0000 0000 = 170141183460469231731687303715884105728.000000 = 0x7f000000\} 。通过 C 和 MARS 进行实验，发现的确如此。
+
+\homep{ex3}
+
+此处需要找到一个\textbf{最小的}浮点数，因此需要仔细考虑浮点数的间隔下界大于 1 的临界点，此时作为尾数域的最小变化会引起整个浮点数增加 2 ，那么指数是 24 = 0x18 ，那么指数域为 24+127 = 0x97 ，那么位表示为 \{0b 0 | 100 1011 1 | 000 0000 0000 0000 0000 = 16777216.000000 = 0x4b800000\} 。若是尝试 \{0x4b800000 - 1= 0x4b7fffff = 16777215.000000\} 则会失败，验证完毕。
+
+\homep{ex4}
+
+事实上浮点数的不可交换源自于浮点数的特殊值也就是 \(\infty\) 和 NaN 。如果前两个值相加会溢出，而第三个值的提前出现会防止这种情况的出现。这样的集合可以表示为
+
+\[\{a, b, c | a + b \text{ overflow } \&\&  |a+c|< |a| \text{ thus } (a+c)+b \text{ don't overflow}\}\]
+
+进行举例，最大的规格化值 \{0b 0 1111 1110 1111 1111 1111 1111 1111 111 \} ，它的一半 \{0b 0 1111 1101 1111 1111 1111 1111 1111 111\} ， 它的相反数  \{0b 1 1111 1111 1110 1111 1111 1111 1111 111 \} 分别作为 a, b, c 。
+
+\lstinputlisting[caption={ex4 solution}]{lab02/ex4.c}
+
+% \lstinputlisting[caption={ex4 solution}]{lab02/ex4.c}
+输出为 
+
+\begin{lstlisting}
+    340282346638528859811704183484516925440.000000
+    170141173319264429905852091742258462720.000000
+    -170141173319264429905852091742258462720.000000
+    inf
+    340282346638528859811704183484516925440.000000    
+\end{lstlisting}
+   
+
+% End Here
+
+\end{document}
