@@ -1,0 +1,29 @@
+\ifx\mainclass\undefined
+\documentclass[cn,11pt,chinese,black,simple]{../elegantbook}
+\input{../needed.tex}
+\begin{document}
+\fi 
+\def\chapname{06hw}
+
+% Start Here
+\chapter{硬件实现}
+
+对于硬件系统来说，一般分为同步系统和异步系统，同步系统可以做到更高的速度。
+
+% \section{逻辑设计}
+
+逻辑设计的技巧与规则对系统性能的影响十分明显。通过逻辑设计的语言进行硬件的描述，来实现整体的功能。
+
+
+硬件和软件是相互耦合的，也因此可以进行优化，但是也出现了相应的平台依赖问题。
+
+\section*{术语}
+
+MMU: Memory Management Unit
+
+% End Here
+
+\let\chapname\undefined
+\ifx\mainclass\undefined
+\end{document}
+\fi 
