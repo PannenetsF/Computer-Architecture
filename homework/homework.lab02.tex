@@ -33,13 +33,13 @@
 
 \homep{ex4}
 
-事实上浮点数的不可交换源自于浮点数的特殊值也就是 \(\infty\) 和 NaN 。如果前两个值相加会溢出，而第三个值的提前出现会防止这种情况的出现。这样的集合可以表示为
+事实上浮点数的不可交换原因之一是浮点数的特殊值也就是 \(\infty\) 和 NaN 。如果前两个值相加会溢出，而第三个值的提前出现会防止这种情况的出现。这样的集合可以表示为
 
 \[\{a, b, c | a + b \text{ overflow } \&\&  |a+c|< |a| \text{ thus } (a+c)+b \text{ don't overflow}\}\]
 
 进行举例，最大的规格化值 \{0b 0 1111 1110 1111 1111 1111 1111 1111 111 \} ，它的一半 \{0b 0 1111 1101 1111 1111 1111 1111 1111 111\} ， 它的相反数  \{0b 1 1111 1111 1110 1111 1111 1111 1111 111 \} 分别作为 a, b, c 。
 
-\lstinputlisting[caption={ex4 solution}]{lab02/ex4.c}
+\lstinputlisting[caption={ex4 solution-1}]{lab02/ex4.c}
 
 % \lstinputlisting[caption={ex4 solution}]{lab02/ex4.c}
 输出为 
@@ -52,6 +52,38 @@
     340282346638528859811704183484516925440.000000    
 \end{lstlisting}
    
+另一方面的原因还包括，对于同一符号类型的数据，由于阶数不同，相邻浮点数的间隔也不同，若是求和时顺序使得被加数在间隔内，则不会引起变化。定义浮点数 \(a\) 的阶数下，尾数变化的最小单位为 \(\delta_a\) 。那么 \((a+b)+c \neq a+(b+c)\) 可以表述为
+
+\[\{a, b, c| a \geq \delta_b \&\& a < \delta_{b+c}\}\]
+
+举例，\(b\) 和 \(c\) 取间隔为 2 的浮点数 \{0b 0 | 100 1011 1 | 000 0000 0000 0000 0000 = 16777216.000000 = 0x4b800000\} ，\(a\)  取浮点数 2.1 。
+
+\lstinputlisting[caption={ex4 solution-2}]{lab02/ex4_2.c}
+
+输出为 
+
+\begin{lstlisting}
+    40066666
+    33554432.000000
+    33554436.000000
+\end{lstlisting}
+
+进一步的，需要进行 MIPS 的程序设计，请见 p2\_1.s 。
+
+
+\lstinputlisting[caption={ex4 solution-2 mips}]{lab02/p2_1.s}
+
+输出为 
+
+\begin{lstlisting}
+    1.6777216E7
+    2.1
+    (a+b)+c is 3.3554432E7
+    a+(b+c) is 3.3554436E7
+
+-- program is finished running (dropped off bottom) --
+\end{lstlisting}
+
 
 % End Here
 
