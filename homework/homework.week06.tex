@@ -1,0 +1,122 @@
+\documentclass[lang=cn,11pt,a4paper,cite=authoryear,twocolumn]{elegantpaper}
+
+\input{needed.tex}
+
+\title{计算机体系架构\quad 第六周作业}
+\author{范云潜 18373486}
+\institute{微电子学院 184111 班}
+\date{\zhtoday}
+
+\begin{document}
+
+\maketitle
+
+作业内容：B.2 B.4 B.6 B.11 B.18 B.21 
+
+% \tableofcontents
+
+\homep{B.2}
+
+\[\begin{aligned}
+    E &=((A \cdot B)+(A \cdot C)+(B \cdot C)) \cdot(\overline{A \cdot B \cdot C}) \\
+    &= (AB + AC + BC) \cdot (A' + B' + C') \\
+    &= (A'BC + AB'C + ABC') \\ 
+    &=(A \cdot B \cdot \bar{C})+(A \cdot C \cdot \bar{B})+(B \cdot C \cdot \bar{A})
+\end{aligned}\]
+
+\homep{B.4}
+
+\[A xor B = (A B') + (A' B)\]
+
+\begin{table}[htb]
+\caption{xor 真值表}
+\centering
+\label{tab:my-table}
+\begin{tabular}{ll}\hline
+\{AB\} & A xor B \\ \hline 
+00     & 1       \\
+01     & 0       \\
+10     & 0       \\
+11     & 1      \\\hline
+\end{tabular}
+\end{table}
+
+\qfig[p1]{h6p1.png}{异或门实现}
+
+\homep{B.6}
+
+\[A' = (A \cdot 1)'\]
+
+\[A \cdot B = ((A \cdot B)')'\]
+
+\[A + B = (A' \cdot B')'\]
+
+\homep{B.11}
+
+\subhome{1}
+
+\[(\sum (x_i = 0) == 1) = x_2'x_1x_0 + x_2x_1'x_0 + x_2x_1x_0'\]
+
+\subhome{2}
+
+\[\begin{aligned}
+    (\sum (x_i = 0) \% 2 == 0) &= x_2'x_1'x_0 + x_2'x_1x_0'\\
+     + x_2x_1'x_0' + x_2x_1x_0
+\end{aligned}\]
+
+\subhome{3}
+
+\[\begin{aligned}
+    (\mathtt{unsigned}  X < 4) &= x_2'x_1'x_0' + x_2'x_1'x_0 + \\
+     & x_2'x_1x_0' + x_2'x_1x_0
+\end{aligned}\]
+
+\subhome{4}
+
+\[\begin{aligned}
+    (\mathtt{signed }\quad X < 0) &= x_2'
+\end{aligned}\]
+
+\homep{B.18}
+
+\(\mathtt{FUNC1 }\) 是一个 MUX，在 \lstinline{S = 1} ，输出 \lstinline{I1} ，其他时刻输出 \lstinline{I0} 。
+
+\lstinline{FUNC2} 是一个计数器，在复位时输出归零，其他时刻若是 \lstinline{ctl} 为一则输出加一，反之减一。
+
+\homep{B.21}
+
+\begin{lstlisting}
+    module acc (
+    input clk,
+    input rst_a,
+    input load,
+    input [3:0] in,
+    input [15:0] Load,
+    output [15:0] out
+);
+
+reg [15:0] str;
+
+assign out = str;
+
+always @(posedge clk or rst_a) begin
+    if (rst_a) begin
+        str <= 0;
+    end
+    else begin
+        if (load) begin
+            str <= Load;
+        end
+        else begin
+            str <= in + out;
+        end
+    end
+end
+    
+endmodule
+\end{lstlisting}
+% Start Here
+
+% End Here
+
+\end{document}
