@@ -1,0 +1,122 @@
+\documentclass[lang=cn,11pt,a4paper,cite=authoryear]{elegantpaper}
+
+\input{needed.tex}
+
+\title{计算机体系架构\quad Lab03}
+\author{范云潜 18373486}
+\institute{微电子学院 184111 班}
+\date{\zhtoday}
+
+\begin{document}
+
+\maketitle
+
+\homep{ex1}
+
+分为两个状态机， CE 控制保持与计数的状态，若是处在计数的状态，计数的循环（第二个状态机）进行工作，如 \figref{01} 。
+
+\qfig[01]{l3p1.png}{状态机}
+
+\homep{ex2}
+
+波形图如 \figref{02} ，其中加法延时为 \(2/10 clk\) ，寄存器延时为 \(1/10 clk\) 。
+
+\qfig[02]{l3p2.png}{状态机波形图}
+
+这是一个简单的 \lstinline{fib} 计算电路。
+
+Reg2 在 \lstinline{rst} 后的第 i 个周期，保存 \lstinline{fib(i)} 的值。
+
+使用 C 进行计算。
+
+\begin{lstlisting}
+    int fib(clk) {
+        int r0 = 0;
+        int r1 = 1;
+        int ret;
+        if (clk <= 1) 
+            ret = clk;
+        for (int i = 2; i < clk; ++i) {
+            ret = r0 + r1;
+            r0 = r1;
+            r2 = ret;
+        }
+        return ret;
+    }
+\end{lstlisting}
+
+使用 Verilog 进行建模，硬件部分：
+
+\begin{lstlisting}
+`timescale 10ns/10ns
+
+module c (
+    clk,
+    rst
+);
+
+input clk;
+input rst;
+
+reg [15:0] r1;
+reg [15:0] r2;
+
+wire [15:0] si, si1, si2;
+assign #2 si = si1 + si2;
+assign #1 si1 = r1;
+assign #1 si2 = r2;
+
+// assign 
+
+always @(posedge clk or rst) begin
+    if (rst) begin
+        r1 <= 1;
+        r2 <= 0;    
+    end
+    else begin
+        r1 <= si;
+        r2 <= si1;
+    end
+end
+    
+endmodule
+
+\end{lstlisting}
+
+激励部分：
+
+\begin{lstlisting}
+
+`include "test.v"
+module moduleName (
+
+);
+
+reg clk;
+reg rst;
+
+always #10 clk = ~clk;
+
+
+c u(clk, rst);
+
+initial begin
+    $dumpfile("test.vcd");
+    $dumpvars;
+    clk = 0;
+    rst = 1;
+    #40 rst = 0;
+    #30;
+    #1000;
+    $finish;
+end
+
+endmodule
+
+\end{lstlisting}
+
+% Start Here
+
+% End Here
+
+\end{document}

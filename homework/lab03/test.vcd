@@ -1,0 +1,29 @@
+$date
+	Tue Oct 20 15:24:23 2020
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module te $end
+$var wire 1 ! r1_i $end
+$var wire 1 " r2_i $end
+$var reg 1 # clk $end
+$scope module u $end
+$var wire 1 # clk $end
+$var wire 1 ! r1_i $end
+$var reg 1 " r2_1 $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0#
+x"
+z!
+$end
+#100000
+1#
+#200000
