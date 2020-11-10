@@ -1,4 +1,4 @@
-\documentclass[lang=cn,11pt,a4paper,cite=authoryear,twocolumn]{elegantpaper}
+\documentclass[lang=cn,11pt,a4paper,cite=authoryear]{elegantpaper}
 
 \input{needed.tex}
 
@@ -17,22 +17,86 @@
 
 如果不考虑成本的话，更大的 SRAM 会占据更大额度片上面积，进而影响其他的模块，并且缺少 RAM 接口，难以兼容以 RAM 接口为主的 DMA 模块，速度成为瓶颈。
 
-\homep{7.3} 
+\homep{7.3}
+
+对数据来说，时间连续，但是空间性不强，哈希表是一个很好的例子。
 
 \begin{lstlisting}
-define N 10000
-assign data to int[N][N]
-
-assign index_x to int [N] 
-assign index_y to int [N]
-
-load index_x from rand(int, N)
-load index_y from rand(int, N)
-
-for i in 1:N:
-    for j in 1:N:
-        print(data[index_x][index_y]) 
+Get: HashMap map
+data = map[key]
+for op in {find_index, find_value, ...}:
+    op.answer = op(data)
 \end{lstlisting}
+
+\homep{7.6} 
+
+对指令来说，时间和空间性都不强。
+
+\begin{lstlisting}
+\end{lstlisting}
+
+
+\homep{7.11}    
+
+在不进行优化的情况下，通过时钟函数进行计时，代码如下，y优化比例大概有 2.5 倍。
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <time.h>
+
+int main()
+{
+    static int array[10000][100000];
+    clock_t start, end;
+    start = clock();
+    double t1, t2;
+    for (int i = 0; i < 10000; ++i)
+    {
+        for (int j = 0; j < 100000; ++j)
+        {
+            array[i][j] = 2 * array[i][j];
+        }
+    }
+    end = clock();
+    t1 = end - start;
+    printf("the cost of for-row is %d\n", end - start);
+
+    start = clock();
+    for (int i = 0; i < 100000; ++i)
+    {
+        for (int j = 0; j < 10000; ++j)
+        {
+            array[j][i] = 2 * array[j][i];
+        }
+    }
+    end = clock();
+
+    t2 = end - start;
+    printf("the cost of for-col is %d\n", end - start);
+
+    printf("the ratio is %f", t1 / t2);
+
+    return 0;
+}
+
+>>> the cost of for-row is 7779271
+>>> the cost of for-col is 19284270
+>>> the ratio is 0.403400                
+\end{lstlisting}
+
+\homep{7.25}
+
+\homep{7.32}
+
+需要计算整体未命中的惩罚： \(Total = I_{penalty} + D_{penalty}\) 。
+
+因此分别为：
+
+\[\begin{aligned}
+    t1 &= (6 + 1) \times (4\% + 6\% / 2) = 0.49 \\
+    t2 &= (6 + 4) \times (2\% + 4\% / 2) = 0.4 \\ 
+    t3 &= (6 + 4) \times (2\% + 3\% / 2) = 0.35
+\end{aligned}\]
 
 % Start Here
 

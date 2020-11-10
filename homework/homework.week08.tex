@@ -1,4 +1,4 @@
-\documentclass[lang=cn,11pt,a4paper,cite=authoryear,twocolumn]{elegantpaper}
+\documentclass[lang=cn,11pt,a4paper,cite=authoryear]{elegantpaper}
 
 \input{needed.tex}
 
@@ -17,24 +17,33 @@
 
 如果不考虑成本的话，更大的 SRAM 会占据更大额度片上面积，进而影响其他的模块，并且缺少 RAM 接口，难以兼容以 RAM 接口为主的 DMA 模块，速度成为瓶颈。
 
-\homep{7.3} 
+\homep{7.3}
+
+对数据来说，时间连续，但是空间性不强，哈希表是一个很好的例子。
 
 \begin{lstlisting}
-define N 10000
-assign data to int[N][N]
-
-assign index_x to int [N] 
-assign index_y to int [N]
-
-load index_x from rand(int, N)
-load index_y from rand(int, N)
-
-for i in 1:N:
-    for j in 1:N:
-        print(data[index_x][index_y]) 
+Get: HashMap map
+data = map[key]
+for op in {find_index, find_value, ...}:
+    op.answer = op(data)
 \end{lstlisting}
 
-\homep{7.6}
+\homep{7.6} 
+
+对指令来说，时间和空间性都不强，也就是指令的跳跃性很强。
+
+\begin{lstlisting}
+Get: UserInput keyboard
+data, choice = read(keyboard)
+case(choice):
+    type_1:
+        multiply(data[0], data[1])
+    type_2:
+        add(*((int*)data[2]), 0xff3e)
+    type_3:
+        copy(from=data, to=new_data)
+\end{lstlisting}
+
 
 \homep{7.11}    
 
@@ -85,6 +94,29 @@ int main()
 \end{lstlisting}
 
 \homep{7.25}
+
+\begin{lstlisting}
+addr:
+    2:  empty and load to way1(1-8)
+    3:  hit 
+    11: empty and load to way2(9-16) 
+    16: hit 
+    21: miss and load to way1(17-24)
+    13: hit
+    64: miss and load to way1(57-64)
+    48: miss and load to way2(41-48)
+    19: miss and load to way1(17-24)
+    11: miss and load to way2(9-16)
+    3:  miss and load to way1(1-8)
+    22: miss and load to way2(17-24)
+    4:  hit 
+    27: miss and load to way2(25-32)
+    6:  hit 
+    11: miss and load to way2(9-16)
+buffer:  
+    way1: 1   2   3   4   5   6   7   8
+    way2: 9   10  11  12  13  14  15  16
+\end{lstlisting}
 
 \homep{7.32}
 
