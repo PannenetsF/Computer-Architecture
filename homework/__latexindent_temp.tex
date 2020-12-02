@@ -30,9 +30,18 @@ for op in {find_index, find_value, ...}:
 
 \homep{7.6} 
 
-对指令来说，时间和空间性都不强。
+对指令来说，时间和空间性都不强，也就是指令的跳跃性很强。
 
 \begin{lstlisting}
+Get: UserInput keyboard
+data, choice = read(keyboard)
+case(choice):
+    type_1:
+        multiply(data[0], data[1])
+    type_2:
+        add(*((int*)data[2]), 0xff3e)
+    type_3:
+        copy(from=data, to=new_data)
 \end{lstlisting}
 
 
@@ -86,6 +95,29 @@ int main()
 
 \homep{7.25}
 
+\begin{lstlisting}
+addr:
+    2:  empty and load to way1(1-8)
+    3:  hit 
+    11: empty and load to way2(9-16) 
+    16: hit 
+    21: miss and load to way1(17-24)
+    13: hit
+    64: miss and load to way1(57-64)
+    48: miss and load to way2(41-48)
+    19: miss and load to way1(17-24)
+    11: miss and load to way2(9-16)
+    3:  miss and load to way1(1-8)
+    22: miss and load to way2(17-24)
+    4:  hit 
+    27: miss and load to way2(25-32)
+    6:  hit 
+    11: miss and load to way2(9-16)
+buffer:  
+    way1: 1   2   3   4   5   6   7   8
+    way2: 9   10  11  12  13  14  15  16
+\end{lstlisting}
+
 \homep{7.32}
 
 需要计算整体未命中的惩罚： \(Total = I_{penalty} + D_{penalty}\) 。
@@ -98,6 +130,13 @@ int main()
     t3 &= (6 + 4) \times (2\% + 3\% / 2) = 0.35
 \end{aligned}\]
 
+\homep{7.36}
+
+18 32K x 16-bit 
+
+每个数据是 4 * 16-bit ，偏移为 2 位， 那么共有 18 * 8 K 个数据，每组 3 路， 共 48 K 组，那么组索引需要 \(\log_2 64 K = 16\) 位，因此标记有 14 位。
+
+\qfig{h9.png}{7.36}
 % Start Here
 
 % End Here
